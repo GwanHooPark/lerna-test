@@ -3,6 +3,13 @@
 		<h3>{{ msg }}</h3>
 		<div class="roulette-outer">
 			<div class="roulette-pin"></div>
+			<div
+				class="roulette-button"
+				@click="play()"
+				:class="{ active: isActive }"
+			>
+				play
+			</div>
 			<div class="roulette" :style="rouletteRotateAngle">
 				<!-- 값 영역 -->
 				<div class="item-wrapper">
@@ -26,7 +33,6 @@
 				</div>
 			</div>
 		</div>
-		<b-button @click="play()" :disabled="disableButton">play</b-button>
 		<div>
 			원하는 결과 :
 			<select v-model="wantResult">
@@ -59,7 +65,7 @@ export default {
 			lineStyles: [],
 			current: 0,
 			count: 0,
-			disableButton: false,
+			isActive: true,
 			wantResult: -1,
 		};
 	},
@@ -73,7 +79,7 @@ export default {
 		angle() {
 			const temp = this.current * this.segment;
 			const randomOffset =
-				Math.floor(Math.random() * this.segment) - this.offset - 1;
+				Math.floor(Math.random() * this.segment) - this.offset + 1;
 			const cycle = this.count * 360 * 5;
 			return cycle - temp + randomOffset;
 		},
@@ -98,14 +104,15 @@ export default {
 			});
 		},
 		play() {
+			if (!this.isActive) return;
 			this.count++;
 			this.current =
 				this.wantResult < 0
 					? Math.floor(Math.random() * this.items.length)
 					: this.wantResult;
-			this.disableButton = true;
+			this.isActive = false;
 			setTimeout(() => {
-				this.disableButton = false;
+				this.isActive = true;
 			}, 5000);
 		},
 	},
@@ -116,8 +123,8 @@ export default {
 .roulette-outer {
 	position: relative;
 	overflow: hidden;
-	width: 500px;
-	height: 500px;
+	width: 400px;
+	height: 400px;
 	font-size: 30px;
 	margin-left: auto;
 	margin-right: auto;
@@ -141,6 +148,30 @@ export default {
 	border-width: 25px 5px 0 5px;
 	border-color: #ff0000 transparent transparent transparent;
 	margin-left: -5px;
+}
+.roulette-outer > .roulette-button {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	cursor: initial;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background-color: #256d4d;
+	border: 2px solid #fff;
+	box-shadow: 0 0 16px rgb(221, 221, 221);
+	text-align: center;
+	font-size: 21px;
+	font-weight: bold;
+	color: #fff;
+	line-height: 71px;
+	font-family: sans-serif;
+}
+.active {
+	background-color: #3eaf7c !important;
+	cursor: pointer !important;
 }
 .roulette-outer > .roulette > .item-wrapper > .item {
 	position: absolute;
