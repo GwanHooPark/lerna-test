@@ -1,8 +1,7 @@
 <template>
 	<div class="home">
-		<img alt="Vue logo" src="../assets/logo.png" />
-		<HelloWorld msg="Welcome to Your Vue.js App" />
-		<Halo msg="core package halo~~~"></Halo>
+		<HelloWorld msg="Welcome to PPURIO" />
+		<Halo msg="@app/core/Halo.vue"></Halo>
 	</div>
 </template>
 
